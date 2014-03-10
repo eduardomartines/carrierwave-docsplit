@@ -5,7 +5,7 @@ require "carrierwave/pdf2thumbs/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "carrierwave-pdf2thumbs"
-  spec.version       = Carrierwave::Pdf2thumbs::VERSION
+  spec.version       = CarrierWave::Pdf2thumbs::VERSION
   spec.authors       = ["Eduardo Martines"]
   spec.email         = ["martines.eduardo@gmail.com"]
   spec.summary       = %q{Carrierwave extension that generates thumbnails of pdf pages}

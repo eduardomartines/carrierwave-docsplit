@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Carrierwave::Pdf2thumbs do
+describe CarrierWave::Pdf2thumbs do
   describe "local storage" do
   end
 

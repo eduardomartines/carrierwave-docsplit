@@ -1,4 +1,4 @@
-module Carrierwave
+module CarrierWave
   module Pdf2thumbs
     class Extract
       def initialize(width, height)

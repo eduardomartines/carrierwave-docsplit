@@ -1,7 +1,7 @@
 require "carrierwave/pdf2thumbs/version"
 require "carrierwave/pdf2thumbs/extract"
 
-module Carrierwave
+module CarrierWave
   module Pdf2thumbs
     module ClassMethods
       def pdf2thumbs(width, height)
