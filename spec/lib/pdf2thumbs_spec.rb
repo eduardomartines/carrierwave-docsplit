@@ -9,6 +9,7 @@ describe CarrierWave::Pdf2thumbs do
     FileUtils.cp(file_path('doc.pdf'), file_path('doc_copy.pdf'))
     @instance.stub(:current_path).and_return(file_path('doc_copy.pdf'))
     @instance.stub(:cached?).and_return true
+    @instance.pdf2thumbs(200, nil)
   end
 
   after do
@@ -16,10 +17,14 @@ describe CarrierWave::Pdf2thumbs do
   end
 
   describe "#extract_images" do
+    it "extracts images with the correct size"
+
+    it "extracts all the pages"
+
     context "local storage" do
-      it "extracts the images" do
-        @instance.pdf2thumbs(200, nil)
-      end
+      it "creates the right folder"
+
+      it "extracts to the right path"
     end
 
     context "remote storage" do
