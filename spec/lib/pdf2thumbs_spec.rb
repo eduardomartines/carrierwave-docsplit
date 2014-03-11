@@ -33,10 +33,18 @@ describe CarrierWave::Pdf2thumbs do
       images.length.should == count
     end
 
+    let(:first_extracted_image_path) {
+      Dir.glob(File.join(file_path(folder_name), "*"))[0]
+    }
+
     it "extracts with the right width" do
-      image = Dir.glob(File.join(file_path(folder_name), "*"))[0]
-      width = MiniMagick::Image.open(image)[:width]
-      width.should == WIDTH
+      image_width = MiniMagick::Image.open(first_extracted_image_path)[:width]
+      image_width.should == WIDTH
+    end
+
+    it "extracts with the right height" do
+      image_height = MiniMagick::Image.open(first_extracted_image_path)[:height]
+      image_height.should == HEIGHT
     end
 
     context "remote storage" do
