@@ -13,7 +13,7 @@ Adding it to your Gemfile:
 gem 'carrierwave-pdf2thumbs'
 ```
 
-Including Pdf2thumbs module:
+Including the module:
 
 ```ruby
 class YourUploader < CarrierWave::Uploader::Base
