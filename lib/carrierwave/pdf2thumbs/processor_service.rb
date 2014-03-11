@@ -20,7 +20,7 @@ module CarrierWave
       end
 
       def extract_images
-        ::Docsplit.extract_images(@input_path, output: @output_path, size: size)
+        Docsplit.extract_images(@input_path, output: @output_path, size: size)
       end
 
       def size
