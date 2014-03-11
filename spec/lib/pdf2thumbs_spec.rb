@@ -29,9 +29,9 @@ describe CarrierWave::Pdf2thumbs do
     end
 
     it "extracts all the pages" do
-      count = Docsplit::InfoExtractor.new.extract(:length, file_path(FILENAME), {})
-      images = Dir.glob(File.join(file_path(folder_name), "*"))
-      images.length.should == count
+      number_of_pages  = pdf_info_extractor(:length, file_path(FILENAME))
+      number_of_images = Dir.glob(File.join(file_path(folder_name), "*")).length
+      number_of_images.should == number_of_pages
     end
 
     let(:first_extracted_image_path) {
