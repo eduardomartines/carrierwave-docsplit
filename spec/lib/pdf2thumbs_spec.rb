@@ -55,5 +55,10 @@ describe CarrierWave::Pdf2thumbs do
     it "returns the hash with all the images" do
       @instance.thumbs[folder_name].length.should == number_of_pages
     end
+
+    it "returns sorted images" do
+      @instance.thumbs[folder_name].first.should end_with("_1.png")
+      @instance.thumbs[folder_name].last.should end_with("_#{number_of_pages}.png")
+    end
   end
 end
