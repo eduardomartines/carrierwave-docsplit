@@ -40,25 +40,26 @@ describe CarrierWave::Pdf2thumbs do
 
     it "extracts all the pages" do
       number_of_images = Dir.glob(File.join(file_path(folder_name), "*")).length
-      number_of_images.should == number_of_pages
+      number_of_images.should be_equal number_of_pages
     end
 
     it "extracts with the right width" do
       image_width = MiniMagick::Image.open(first_extracted_image_path)[:width]
-      image_width.should == WIDTH
+      image_width.should be_equal WIDTH
     end
 
     it "returns the hash of images" do
-      @instance.thumbs.should have_key(folder_name)
+      @instance.thumbs.should have_key folder_name
     end
 
     it "returns the hash with all the images" do
-      @instance.thumbs[folder_name].length.should == number_of_pages
+      @instance.thumbs[folder_name].length.should be_equal number_of_pages
     end
 
     it "returns sorted images" do
-      @instance.thumbs[folder_name].first.should end_with("_1.png")
-      @instance.thumbs[folder_name].last.should end_with("_#{number_of_pages}.png")
+      @instance.thumbs[folder_name].each_with_index do |image_path, index|
+        image_path.should end_with "_#{index + 1}.png"
+      end
     end
   end
 end
