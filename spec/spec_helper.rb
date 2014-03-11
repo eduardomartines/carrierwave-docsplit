@@ -10,8 +10,3 @@ end
 def pdf_info_extractor(info_key, file_path, options = {})
   Docsplit::InfoExtractor.new.extract(info_key, file_path, options)
 end
-
-RSpec.configure do |config|
-  config.mock_with :rspec
-end
-
