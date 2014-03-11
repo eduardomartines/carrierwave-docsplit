@@ -14,7 +14,7 @@ module CarrierWave
     end
 
     def pdf2thumbs(width, height)
-      CarrierWave::Pdf2thumbs::Processor.new(input_path, width, height).process
+      CarrierWave::Pdf2thumbs::Processor.new(input_path, output_path, width, height).process
     end
 
     private
@@ -24,5 +24,14 @@ module CarrierWave
     end
 
     alias_method :input_path, :current_path
+
+    def output_path
+      path = Pathname.new(input_path).dirname
+      File.join(path, output_folder_name)
+    end
+
+    def output_folder_name
+      "#{@width}x#{@height}"
+    end
   end
 end
