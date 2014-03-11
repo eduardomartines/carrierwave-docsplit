@@ -3,7 +3,7 @@ carrierwave-pdf2thumbs
 
 [![Build Status](https://travis-ci.org/eduardomartines/carrierwave-pdf2thumbs.png?branch=master)](https://travis-ci.org/eduardomartines/carrierwave-pdf2thumbs)
 
-It extracts all the PDF pages and creates thumbnails with the specified size. Fully tested with Rspec and also works with Amazon S3.
+It extracts all the PDF pages and creates thumbnails with the specified size. Fully tested with Rspec and also works with Amazon S3. `carrierwave-pdf2thumbs` was originally based on [carrierwave-docsplit](https://github.com/woodbridge/carrierwave-docsplit).
 
 ## Getting started
 
