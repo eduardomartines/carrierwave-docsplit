@@ -1,5 +1,6 @@
 require "carrierwave"
 require "docsplit"
+require "mini_magick"
 require "carrierwave/pdf2thumbs"
 
 def file_path(*paths)

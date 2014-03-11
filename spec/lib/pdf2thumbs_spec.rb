@@ -1,33 +1,46 @@
 require "spec_helper"
 
 describe CarrierWave::Pdf2thumbs do
+  WIDTH    = 200
+  HEIGHT   = nil
+  FILENAME = "doc_copy.pdf"
+
+  let(:folder_name) { "#{WIDTH}x#{HEIGHT}" }
+
   before do
     @klass = Class.new do
       include CarrierWave::Pdf2thumbs
+      def store_dir; file_path; end
     end
     @instance = @klass.new
-    FileUtils.cp(file_path('doc.pdf'), file_path('doc_copy.pdf'))
-    @instance.stub(:current_path).and_return(file_path('doc_copy.pdf'))
-    @instance.stub(:cached?).and_return true
-    @instance.pdf2thumbs(200, nil)
+    FileUtils.cp(file_path("doc.pdf"), file_path(FILENAME))
+    @instance.pdf2thumbs(WIDTH, HEIGHT)
   end
 
   after do
-    FileUtils.rm(file_path('doc_copy.pdf'))
+    FileUtils.rm(file_path(FILENAME))
+    FileUtils.rm(file_path(folder_name))
   end
 
   describe "#extract_images" do
-    it "extracts images with the correct size"
+    it "creates the folder" do
+      File.exist?(file_path(folder_name)).should be_true
+    end
 
-    it "extracts all the pages"
+    it "extracts all the pages" do
+      count = Docsplit::InfoExtractor.new.extract(:length, file_path(FILENAME), {})
+      images = Dir.glob(File.join(file_path(folder_name), "*"))
+      images.length.should == count
+    end
 
-    context "local storage" do
-      it "creates the right folder"
-
-      it "extracts to the right path"
+    it "extracts with the right width" do
+      image = Dir.glob(File.join(file_path(folder_name), "*"))[0]
+      width = MiniMagick::Image.open(image)[:width]
+      width.should == WIDTH
     end
 
     context "remote storage" do
+      it "extracts to the right path"
     end
   end
 end
