@@ -2,6 +2,7 @@ require "carrierwave"
 require "carrierwave/pdf2thumbs/version"
 require "carrierwave/pdf2thumbs/processor"
 require "carrierwave/pdf2thumbs/processor_service"
+require "carrierwave/pdf2thumbs/collector"
 
 module CarrierWave
   module Pdf2thumbs
@@ -15,6 +16,10 @@ module CarrierWave
 
     def pdf2thumbs(width, height)
       CarrierWave::Pdf2thumbs::Processor.new(input_path, width, height).process
+    end
+
+    def thumbs
+      CarrierWave::Pdf2thumbs::Collector.new(input_path).thumbs
     end
 
     private

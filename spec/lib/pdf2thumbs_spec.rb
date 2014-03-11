@@ -5,7 +5,9 @@ describe CarrierWave::Pdf2thumbs do
   HEIGHT   = nil
   FILENAME = "doc_copy.pdf"
 
-  let(:folder_name) { "#{WIDTH}x#{HEIGHT}" }
+  let(:folder_name) do
+    "#{WIDTH}x#{HEIGHT}"
+  end
 
   before do
     @klass = Class.new do
@@ -24,27 +26,34 @@ describe CarrierWave::Pdf2thumbs do
   end
 
   describe "#extract_images" do
+    let(:number_of_pages) do
+      pdf_info_extractor(:length, file_path(FILENAME))
+    end
+
+    let(:first_extracted_image_path) do
+      Dir.glob(File.join(file_path(folder_name), "*"))[0]
+    end
+
     it "creates the folder" do
       File.exist?(file_path(folder_name)).should be_true
     end
 
     it "extracts all the pages" do
-      number_of_pages  = pdf_info_extractor(:length, file_path(FILENAME))
       number_of_images = Dir.glob(File.join(file_path(folder_name), "*")).length
       number_of_images.should == number_of_pages
     end
-
-    let(:first_extracted_image_path) {
-      Dir.glob(File.join(file_path(folder_name), "*"))[0]
-    }
 
     it "extracts with the right width" do
       image_width = MiniMagick::Image.open(first_extracted_image_path)[:width]
       image_width.should == WIDTH
     end
 
-    context "remote storage" do
-      it "extracts to the right path"
+    it "returns the hash of images" do
+      @instance.thumbs.should have_key(folder_name)
+    end
+
+    it "returns the hash with all the images" do
+      @instance.thumbs[folder_name].length.should == number_of_pages
     end
   end
 end
