@@ -33,6 +33,12 @@ class YourUploader < CarrierWave::Uploader::Base
 end
 ```
 
+## Docsplit
+
+We use `Docsplit` to split the PDF pages. To install it just follow the official documentation:
+
+http://documentcloud.github.io/docsplit/
+
 ## MIT License
 
 Copyright (c) 2014 Eduardo Martines
