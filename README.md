@@ -39,6 +39,11 @@ We use `Docsplit` to split the PDF pages. To install it just follow the official
 
 http://documentcloud.github.io/docsplit/
 
+## Thanks
+
+* [Document Cloud](http://www.documentcloud.org/) for the open source project `Docsplit`
+* [Carrierwave](https://github.com/carrierwaveuploader/carrierwave) for make our life easier
+
 ## MIT License
 
 Copyright (c) 2014 Eduardo Martines
