@@ -9,6 +9,14 @@ describe CarrierWave::Pdf2thumbs do
     "#{WIDTH}x#{HEIGHT}"
   end
 
+  let(:number_of_pages) do
+    pdf_info_extractor(:length, file_path(FILENAME))
+  end
+
+  let(:first_extracted_image_path) do
+    Dir.glob(File.join(file_path(folder_name), "*"))[0]
+  end
+
   before do
     @klass = Class.new do
       include CarrierWave::Pdf2thumbs
@@ -25,15 +33,7 @@ describe CarrierWave::Pdf2thumbs do
     FileUtils.rm_rf(file_path(folder_name))
   end
 
-  describe "#extract_images" do
-    let(:number_of_pages) do
-      pdf_info_extractor(:length, file_path(FILENAME))
-    end
-
-    let(:first_extracted_image_path) do
-      Dir.glob(File.join(file_path(folder_name), "*"))[0]
-    end
-
+  describe "Processor" do
     it "creates the folder" do
       File.exist?(file_path(folder_name)).should be_true
     end
@@ -47,7 +47,9 @@ describe CarrierWave::Pdf2thumbs do
       image_width = MiniMagick::Image.open(first_extracted_image_path)[:width]
       image_width.should be_equal WIDTH
     end
+  end
 
+  describe "Collector" do
     it "returns the hash of images" do
       @instance.thumbs.should have_key folder_name
     end
