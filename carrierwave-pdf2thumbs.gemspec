@@ -24,5 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "mini_magick", ">= 3.6.0"
 
   spec.add_runtime_dependency "carrierwave"
+  spec.add_runtime_dependency "fog"
   spec.add_runtime_dependency "docsplit"
 end

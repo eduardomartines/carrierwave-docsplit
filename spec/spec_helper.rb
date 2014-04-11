@@ -1,4 +1,5 @@
 require "carrierwave"
+require "fog"
 require "docsplit"
 require "mini_magick"
 require "carrierwave/pdf2thumbs"
