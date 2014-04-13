@@ -26,6 +26,10 @@ module CarrierWave
         @cache_id_was = cache_id
       end
 
+      def before_remove
+        @dir_path = store_dir
+      end
+
       if CarrierWave::Uploader::Base.storage == CarrierWave::Storage::Fog
         def after_store(new_file)
           storage     = Fog::Storage.new(fog_credentials)
@@ -39,10 +43,6 @@ module CarrierWave
               key:  File.join(store_dir, img.split('/').from(-2))
             )
           end
-        end
-
-        def before_remove
-          @dir_path = store_dir
         end
 
         def after_remove
@@ -63,12 +63,10 @@ module CarrierWave
           end
         end
 
-        def before_remove
-          @dir_path = store_dir
-        end
-
         def after_remove
-          FileUtils.rm_rf(File.join(root, @dir_path, "700x"))
+          Dir.glob(File.join(root, @dir_path, "*x*")).each do |thumbs_folder|
+            FileUtils.rm_rf(thumbs_folder)
+          end
         end
       end
 
