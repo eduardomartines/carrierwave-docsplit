@@ -14,20 +14,47 @@ module CarrierWave
       end
     end
 
+    # TODO: fix, calling multiple times the delete
+    def initialize(*opts)
+      c = self.class._before_callbacks
+      unless c.has_key?(:remove) && c[:remove].include?(:before_remove)
+        self.class.instance_eval do
+          before :remove, :before_remove
+          after  :remove, :after_remove
+        end
+
+        def before_remove
+          @dir_path = store_dir
+        end
+
+        if CarrierWave::Uploader::Base.storage == CarrierWave::Storage::Fog
+          def after_remove
+            storage     = Fog::Storage.new(fog_credentials)
+            bucket_name = CarrierWave::Uploader::Base.fog_directory
+            storage.directories.get(bucket_name, prefix: @dir_path).files.map do |f|
+              f.destroy
+            end
+          end
+        else
+          def after_remove
+            Dir.glob(File.join(root, @dir_path, "*x*")).each do |thumbs_folder|
+              FileUtils.rm_rf(thumbs_folder)
+            end
+          end
+        end
+      end
+
+      super
+    end
+
     def pdf2thumbs(width, height)
       self.class.instance_eval do
         before :store,  :before_store
         after  :store,  :after_store
-        before :remove, :before_remove
-        after  :remove, :after_remove
       end
 
       def before_store(new_file)
         @cache_id_was = cache_id
-      end
-
-      def before_remove
-        @dir_path = store_dir
       end
 
       if CarrierWave::Uploader::Base.storage == CarrierWave::Storage::Fog
@@ -38,18 +65,10 @@ module CarrierWave
             key: bucket_name
           )
           Dir.glob(File.join(root, cache_dir, @cache_id_was, "*x*", "*.png")).each do |img|
-            file = bucket.files.create(
+            bucket.files.create(
               body: File.open(img),
               key:  File.join(store_dir, img.split('/').from(-2))
             )
-          end
-        end
-
-        def after_remove
-          storage     = Fog::Storage.new(fog_credentials)
-          bucket_name = CarrierWave::Uploader::Base.fog_directory
-          storage.directories.get(bucket_name, prefix: @dir_path).files.map do |file|
-            file.destroy
           end
         end
       else
@@ -60,12 +79,6 @@ module CarrierWave
               FileUtils.mv(dir, to)
             end
             FileUtils.rm_rf(File.join(root, cache_dir, @cache_id_was))
-          end
-        end
-
-        def after_remove
-          Dir.glob(File.join(root, @dir_path, "*x*")).each do |thumbs_folder|
-            FileUtils.rm_rf(thumbs_folder)
           end
         end
       end
@@ -81,11 +94,11 @@ module CarrierWave
         path        = File.join(current_path.split("/")[0..-2])
         images      = {}
 
-        storage.directories.get(bucket_name, prefix: path).files.map do |file|
-          key = file.key.split("/")[-2]
+        storage.directories.get(bucket_name, prefix: path).files.map do |f|
+          key = f.key.split("/")[-2]
           if key.match(/\D*x\D*/)
             images[key] ||= []
-            images[key] << File.join(asset_host, file.key)
+            images[key] << File.join(asset_host, f.key)
           end
         end
 
