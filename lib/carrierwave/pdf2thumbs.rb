@@ -102,6 +102,10 @@ module CarrierWave
           end
         end
 
+        images.each_key do |key|
+          images[key].sort_by! { |item| item.to_s.split(/(\d+)/).map { |e| [e.to_i, e] } }
+        end
+
         return images
       else
         CarrierWave::Pdf2thumbs::Collector.new(current_path).thumbs
